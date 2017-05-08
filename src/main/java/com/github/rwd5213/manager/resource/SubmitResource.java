@@ -62,15 +62,15 @@ public class SubmitResource {
 			return (Response) createTopologyMetadata.get("Response");
 		}
 		
-		
-		if(!(createTopologyMetadata.containsKey(ManagerUtils.JAR)) || !(createTopologyMetadata.containsKey(ManagerUtils.CLASSPATH))){
+		TopologyMetadata metadata = (TopologyMetadata) createTopologyMetadata.get("Topology");
+
+		if((StringUtils.isBlank(metadata.getJar())) || (StringUtils.isBlank(metadata.getClasspath()))){
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put(ManagerUtils.SUCCESS, ManagerUtils.FALSE);
 			jsonObject.put(ManagerUtils.MESSAGE, "Topology Jar or Classpath cannot be empty");
 			return Response.serverError().entity(jsonObject.toString()).build();
 		}
-		TopologyMetadata metadata = (TopologyMetadata) createTopologyMetadata.get("Topology");
-
+		
 		return submitService.submitTopology(metadata);
 	}
 }
